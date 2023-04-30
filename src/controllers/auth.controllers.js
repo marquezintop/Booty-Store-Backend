@@ -14,6 +14,7 @@ export async function signUp(req, res) {
         
         const token = uuid();
         await db.collection("sessions").insertOne({ userId: user._id, token });
+        console.log(user);
         return res.status(200).send({ name: user.name, token });
     } catch (err) {
         res.status(500).send(err.message);

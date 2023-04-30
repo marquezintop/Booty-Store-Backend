@@ -15,7 +15,7 @@ export async function addMeteorite(req, res) {
     }
 }
 
-export async function getMeteorites(res) {
+export async function getMeteorites(req, res) {
 
     try {
         const meteoritesList = await db.collection("meteorites").find().toArray();
