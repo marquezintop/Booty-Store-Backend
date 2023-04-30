@@ -6,14 +6,15 @@ export async function signUp(req, res) {
     const { name, email, password } = req.body;
 
     try {
-        const user = await db.collection("users").findOne({ email });
-        console.log(user);
-        if (user) return res.status(409).send("E-mail already registered");
+        const userRegistered = await db.collection("users").findOne({ email });
+        if (userRegistered) return res.status(409).send("E-mail already registered");
 
         const hash = bcrypt.hashSync(password, 10);
-
-        await db.collection("users").insertOne({ name, email, password: hash });
-        res.sendStatus(201);
+        const user = await db.collection("users").insertOne({ name, email, password: hash });
+        
+        const token = uuid();
+        await db.collection("sessions").insertOne({ userId: user._id, token });
+        return res.status(200).send({ name: user.name, token });
     } catch (err) {
         res.status(500).send(err.message);
     }
