@@ -8,7 +8,7 @@ const cartRouter = Router();
 
 cartRouter.use(authValidation);
 
-cartRouter.post("/cart/:id", validateSchema(cartItemSchema), addToCart);
+cartRouter.post("/cart", validateSchema(cartItemSchema), addToCart);
 cartRouter.delete("/delete-product", validateSchema(cartItemSchema), deleteMeteoriteFromCart);
 cartRouter.get("/get-cart", getMeteoritesFromCart)
 

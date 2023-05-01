@@ -8,7 +8,7 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 server.use(authRouter);
-server.use(productsRouter);4
+server.use(productsRouter);
 server.use(cartRouter);
 
 const PORT = 5000;
