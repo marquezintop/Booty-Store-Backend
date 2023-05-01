@@ -21,14 +21,26 @@ export async function addToCart(req, res) {
   }
 };
 
-export async function deleteItemFromCart(req, res) {
+export async function deleteMeteoriteFromCart(req, res) {
   const { name } = req.body;
   const { authorization } = req.headers;
   const token = authorization?.replace("Bearer ", "");
 
   try {
     await db.collection("cart").deleteOne({name: name, token: token})
-    res.status(200).send("Item deleted successfully")
+    res.status(200).send("Product deleted successfully")
+  } catch (err) {
+    res.status(500).send(err.response)
+  }
+}
+
+export async function getMeteoritesFromCart(req, res) {
+  const { authorization } = req.headers;
+  const token = authorization?.replace("Bearer ", "");
+
+  try {
+    const meteorites = await db.collection("cart").find({token: `${token}`}).toArray()
+    res.status(200).send(meteorites);
   } catch (err) {
     res.status(500).send(err.response)
   }
