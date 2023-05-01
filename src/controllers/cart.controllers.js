@@ -3,13 +3,13 @@ import { ObjectId } from "mongodb";
 
 export async function addToCart(req, res) {
   const { name, picture, price } = req.body;
-  const { id } = req.params;
-  const { authorization } = req.headers;
-  const token = authorization?.replace("Bearer ", "");
+  const id = req.params.id;
+  const token = res.locals;
 
   try {
-    const meteorite = db.collection("products").findOne({_id: new ObjectId(id)});
+    const meteorite = await db.collection("meteorites").findOne({_id: new ObjectId(id)});
     if(!meteorite) return res.sendStatus(409);
+    
 
     const meteoriteCart = await db.collection("cart").findOne({name: name, token: token});
     if(meteoriteCart) return res.status(409).send("This item is already in your cart.");
@@ -23,8 +23,7 @@ export async function addToCart(req, res) {
 
 export async function deleteMeteoriteFromCart(req, res) {
   const { name } = req.body;
-  const { authorization } = req.headers;
-  const token = authorization?.replace("Bearer ", "");
+  const token = res.locals;
 
   try {
     await db.collection("cart").deleteOne({name: name, token: token})
@@ -35,8 +34,7 @@ export async function deleteMeteoriteFromCart(req, res) {
 }
 
 export async function getMeteoritesFromCart(req, res) {
-  const { authorization } = req.headers;
-  const token = authorization?.replace("Bearer ", "");
+  const token = res.locals;
 
   try {
     const meteorites = await db.collection("cart").find({token: `${token}`}).toArray()

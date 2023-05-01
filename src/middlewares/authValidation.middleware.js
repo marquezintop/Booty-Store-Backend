@@ -8,6 +8,7 @@ export async function authValidation(req, res, next) {
     try {
         const sessions = await db.collection("sessions").findOne({ token });
         if (!sessions) return res.sendStatus(401);
+        res.locals = token;
 
         next();
 
