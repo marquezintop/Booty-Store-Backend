@@ -10,7 +10,8 @@ export async function signUp(req, res) {
         if (userRegistered) return res.status(409).send("E-mail already registered");
 
         const hash = bcrypt.hashSync(password, 10);
-        const user = await db.collection("users").insertOne({ name, email, password: hash });
+        await db.collection("users").insertOne({ name, email, password: hash });
+        const user = await db.collection("users").findOne({email})
         
         const token = uuid();
         await db.collection("sessions").insertOne({ userId: user._id, token });
