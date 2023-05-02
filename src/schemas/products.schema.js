@@ -13,5 +13,6 @@ export const meteoriteSchema = joi.object({
 export const cartItemSchema = joi.object({
     name: joi.string().required(),
     picture: joi.string().uri().required(),
-    price: joi.number().precision(2).required()
+    price: joi.number().precision(2).required(),
+    id: joi.string().required()
 });
