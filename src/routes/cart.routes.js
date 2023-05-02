@@ -9,7 +9,7 @@ const cartRouter = Router();
 cartRouter.use(authValidation);
 
 cartRouter.post("/cart", validateSchema(cartItemSchema), addToCart);
-cartRouter.delete("/delete-meteorite", deleteMeteoriteFromCart);
+cartRouter.post("/delete-meteorite", deleteMeteoriteFromCart);
 cartRouter.get("/get-cart", getMeteoritesFromCart)
 cartRouter.delete("/checkout-cart", checkoutCart)
 

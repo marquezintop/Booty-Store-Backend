@@ -10,11 +10,11 @@ export async function addToCart(req, res) {
     if(!meteorite) return res.sendStatus(409);
     
 
-    const meteoriteCart = await db.collection("cart").findOne({_id: new ObjectId(id), userId: userId});
+    const meteoriteCart = await db.collection("cart").findOne({id: id, userId: userId});
     if(meteoriteCart) return res.status(409).send("This item is already in your cart.");
 
     await db.collection("cart").insertOne({name, picture, price, userId, id});
-    return res.sendStatus(200);
+    return res.status(200).send("Meteorite added to your cart!");
   } catch (err) {
     return res.status(500).send(err.response);
   }
@@ -25,7 +25,8 @@ export async function deleteMeteoriteFromCart(req, res) {
   const userId = res.locals;
 
   try {
-    await db.collection("cart").deleteOne({name: name, userId: userId})
+    const deleted = await db.collection("cart").deleteOne({name: name, userId: userId})
+    console.log(deleted)
     return res.status(200).send("Product deleted successfully")
   } catch (err) {
     return res.status(500).send(err.response)
@@ -37,6 +38,7 @@ export async function getMeteoritesFromCart(req, res) {
 
   try {
     const cartMeteorites = await db.collection("cart").find({userId: userId}).toArray()
+    console.log(cartMeteorites)
     return res.status(200).send(cartMeteorites);
   } catch (err) {
     return res.status(500).send(err.response)
